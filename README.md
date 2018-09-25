@@ -12,3 +12,7 @@ print写法在python2中和python3中不一样，导致编译会报错，通过�
 ndk-stack -sym $SYMBOL_SO_PATH -dump crash.txt
 arm-hisiv200-linux-addr2line -C -f -s -e android4.4.4_chromium_org/out/target/product/orange/symbols/system/lib/libsywebviewchromium.so 001cfb55
 SYMBOL_SO_PATH是符号库目录，在Android源码中是out/target/product/xx/symbol/system/lib。
+
+4、webkit中解析css配置文件（OptPraseDemo）
+通过配置文件对所以的属性进行配置，python解析并生成指定格式的模板类文件。
+eg: make_css_property_names.py ..\CSSProperty.in --output_dir "..\blink" --defines "\"ENABLE_EXPAND_HTML=0\""
