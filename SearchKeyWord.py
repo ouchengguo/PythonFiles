@@ -37,20 +37,29 @@ class SearchFile(object):
     def walkPath(self):
         file_count = 0
         filelist = []
-        for root, dirs, files in os.walk(self.search_path, topdown=True):
-            if self.isHiddenOrSystem(root):
-                print("[walkPath] root:[%s] isHiddenOrSystem Folder, overflow." % (root))
-                continue
-            for name in files:
-                filelist.append(os.path.join(root, name))
-            for filename in filelist:
-                if self.isHiddenOrSystem(filename):
-                    print("[walkPath] filename:[%s] isHiddenOrSystem file, overflow." % (filename))
+        if self.m_keyword.startswith('*') or self.m_keyword.endswith('*'):
+            for root, dirs, files in os.walk(self.search_path, topdown=True):
+                if self.isHiddenOrSystem(root):
+                    print("[walkPath] root:[%s] isHiddenOrSystem Folder, overflow." % (root))
                     continue
-                if os.path.isfile(filename):
-                    if fnmatch.fnmatch(filename, self.file_filter):
-                        self.searchStringInFile(os.path.join(root, filename))
-                        file_count += 1
+                for name in files:
+                    filelist.append(os.path.join(root, name))
+                for filename in filelist:
+                    filepath = os.path.join(root, filename)
+                    if self.isHiddenOrSystem(filename):
+                        print("[walkPath] filename:[%s] isHiddenOrSystem file, overflow." % (filename))
+                        continue
+                    if os.path.isfile(filepath):
+                        if (self.file_filter == '*' or self.file_filter == "*.*"):
+                            self.searchStringInFile(filepath)
+                            file_count += 1
+                        else:
+                            if fnmatch.fnmatch(filepath, self.file_filter):
+                                self.searchStringInFile(filepath)
+                                file_count += 1
+        else:
+            filepath = os.path.join(self.search_path, self.file_filter)
+            self.ConverFile(filepath)
         return file_count
 
     def searchStringInFile(self, filename):
