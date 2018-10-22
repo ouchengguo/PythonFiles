@@ -26,7 +26,7 @@ class ConverFileEncode(object):
         return (is_hidden or is_system)
 
     def ConverFile(self, filepath):
-        if (filepath == ''):
+        if (filepath == ""):
             return
         # Backup the origin file.
         #shutil.copyfile(filepath, filepath + '.bak')
@@ -34,7 +34,11 @@ class ConverFileEncode(object):
         # convert file from the source encoding to target encoding
         content = codecs.open(filepath, 'rb').read()
         #print("[ConverFile] content:%s" % content)
+        if (content == ""):
+            return
         src_encoding = chardet.detect(content).get('encoding')
+        if (src_encoding == None):
+            return
         print(("[ConverFile] filedetect:%s, src_encoding:%s, dest_encoding:%s, file:%s" % (chardet.detect(content), src_encoding, self.m_encoding, filepath)))
         new_content = content.decode(src_encoding, 'ignore').encode(self.m_encoding)
         #print("[ConverFile] new_content:%s" % new_content)
