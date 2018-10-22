@@ -16,3 +16,7 @@ SYMBOL_SO_PATH是符号库目录，在Android源码中是out/target/product/xx/s
 4、webkit中解析css配置文件（OptPraseDemo）
 通过配置文件对所以的属性进行配置，python解析并生成指定格式的模板类文件。
 eg: make_css_property_names.py ..\CSSProperty.in --output_dir "..\blink" --defines "\"ENABLE_EXPAND_HTML=0\""
+
+5、常用文件编码格式的转换(ConverEncode.py)
+通过获取源文件的编码格式，使用内置的content.decode("srcEncoding").encode(destEncoding)将srcEncoding格式转换为destEncoding格式的编码，也可以进行文件夹下所有文件的编码格式的转换或者指定类型文件的转换。
+eg：python ConverEncode.py "utf-8" "*.py" "D:\SearchFolders\"
