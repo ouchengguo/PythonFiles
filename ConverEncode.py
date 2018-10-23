@@ -1,10 +1,20 @@
 # -*- coding: utf-8 -*-
 
-import codecs, chardet
-import sys, os, fnmatch
-import win32file, win32con
+import codecs
+import fnmatch
+import os
+import sys
+import win32file
+
+import chardet
+import win32con
+import traceback
 
 EncodeType = ["utf-8", "UTF-8", "GB2312", "gb2312", "GBK", "gbk", "Unicode", "ascii", "ASCII", "GB18030"]
+
+class Error(Exception):
+    def __init__(self, msg):
+        Exception.__init__(self, msg)
 
 class ConverFileEncode(object):
     def __init__(self, encoding, keyword, path):
@@ -34,13 +44,19 @@ class ConverFileEncode(object):
         # convert file from the source encoding to target encoding
         content = codecs.open(filepath, 'rb').read()
         #print("[ConverFile] content:%s" % content)
-        if (content == ""):
+        if (content == None):
             return
-        src_encoding = chardet.detect(content).get('encoding')
+        try:
+            src_encoding = chardet.detect(content).get('encoding')
+        except Exception as e:
+            print ('[Exception] In file \'%s\', %s\n\n' % (filepath, str(e)))
         if (src_encoding == None):
             return
         print(("[ConverFile] filedetect:%s, src_encoding:%s, dest_encoding:%s, file:%s" % (chardet.detect(content), src_encoding, self.m_encoding, filepath)))
-        new_content = content.decode(src_encoding, 'ignore').encode(self.m_encoding)
+        try:
+            new_content = content.decode(src_encoding, 'ignore').encode(self.m_encoding)
+        except Exception as e:
+            print ('[Exception] In file \'%s\', %s\n\n' % (filepath, repr(e)))
         #print("[ConverFile] new_content:%s" % new_content)
         codecs.open(filepath, 'wb').write(new_content)
 
